@@ -1,16 +1,82 @@
-# recipe_app
+# Recipe Application
 
-Flutter application for displaying different recipes using API
+Оваа апликација е дел од курсот Мобилни информациски системи и се 
+однесува на прикажување на рецепти со користење на API од TheMealDB 
+(https://www.themealdb.com/api.php).  
+  
+  
+## Краток Опис
 
-## Getting Started
+Постојат три главни модели на работа во апликацијата и тоа:  
+- класата Category, која содржи основни информации за можните
+категории (id, name, thumbnail, description)
+- класата MealSummary, содржи општи податоци за достапните јадења
+од избраната категорија (id, name, thumbnail)  
+- класата MealDetail, која опфаќа и други подетални информации за
+одредено јадење, како што се: category, area, instructions, 
+youtubeUrl и листа на ingredients.
+  
+Овие класи се наоѓаат во models директориумот.    
 
-This project is a starting point for a Flutter application.
+Во service директориумот, поточно во api_service.dart се наоѓа 
+имплементацијата на повеќе методи кои ни помагаат во извлекување на 
+податоци од API-то што го користиме и нивно прикажување.  
+  
+Во screens директориумот пак, се сместени четири фајлови во кои е 
+дефиниран корисничкиот интерфејс за сите четири екрани соодветно, 
+кој може да се види на сликите подолу.  
+  
+За имплементација на корисничкиот интерфејс, дефинирани се и два 
+custom widgets, кои се однесуваат на начинот на прикажување на картичките 
+за категориите и за јадењата од соодветната категорија 
+на екран. Истите може да се најдат во widgets директориумот.  
 
-A few resources to get you started if this is your first Flutter project:
+    
+## Кориснички интерфејс
+Во продолжение е прикажан корисничкиот интерфејс на апликацијата.  
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+<img width="400" height="500" alt="58" src="https://github.com/user-attachments/assets/42dc2192-e3fd-4abb-b5e5-c2c5c4df6268" />
+<img width="400" height="500" alt="59" src="https://github.com/user-attachments/assets/fd1025d6-4b0c-4670-8917-6735530f6101" />
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Како што може да забележиме, на почетниот екран се дадени сите можни категории
+на јадења од кои корисникот може да избира. Овие категории се претставени преку
+картички кои го содржат името на категоријата, краток опис, како и слика која
+визуелно ја репрезентира категоријата. Со скролање надолу по екранот може да се
+видат сите достапни категории. Најгоре на екранот има и поле кое му овозможува на
+крајниот корисник да пребарува низ категориите според клучен збор. 
+Оваа функционалност е прикажана на сликата во продолжение.  
+<img width="400" height="500" alt="64" src="https://github.com/user-attachments/assets/68e0c65d-0c55-41a7-b715-03e390ca6131" />  
+  
+Изборот на посакуваната категорија се прави со клик на нејзината картичка,
+по што се случува редирекција на екранот на кој сега се прикажани најразлични 
+јадења од соодветно избраната категорија.  
+
+<img width="400" height="500" alt="65" src="https://github.com/user-attachments/assets/62c58f25-5a33-4cc4-a32b-d4255fa033c1" />
+<img width="400" height="500" alt="66" src="https://github.com/user-attachments/assets/105f7b53-e6e2-4e4c-bd3e-a6840a5333d5" />  
+
+    
+Како што можеме да видиме на сликите погоре и јадењата се прикажани во ист стил 
+како и категориите, односно со картички кои го содржат името на јадењето и слика. 
+Со скролање надолу по екранот може да се видат сите достапни јадења. И тука е достапно
+поле кое му овозможува на корисникот пребарување на јадењата според клучен збор.
+Оваа функционалност може да ја видиме на сликата во продолжение.  
+<img width="400" height="500" alt="67" src="https://github.com/user-attachments/assets/32b1760a-065e-4051-865e-dabc04877c80" />   
+
+  
+Дополнително, тука има и копче View Details, кое при клик не редиректира на нов екран, 
+кој прикажува детален преглед за јадењето што сме го избрале.  
+<img width="400" height="500" alt="68" src="https://github.com/user-attachments/assets/f95b4986-3165-4c76-babe-67eca6e0883f" />
+<img width="400" height="500" alt="70" src="https://github.com/user-attachments/assets/f253183c-9d06-4090-814c-e51ce1ad6401" />  
+  
+Деталниот приказ се состои од слика која визуелно го репрезентира јадењето, потоа следи
+името на јадењето, на која категорија припаѓа и областа од која потекнува. Следи и листата
+со сите состојки, како и детални инструкции и чекори, потребни за приготвување на ова јадење.
+Најдолу има и копче Watch on Youtube, кое при клик ни отвара видео упатство на youtube за 
+подготовка на рецептот.  
+  
+Последната функционалност е копчето во горниот десен агол на екранот за приказ на категории 
+на јадења. При клик на ова копче, на корисникот повторно му се отвара екранот за детален преглед,
+но овој пат детален преглед на рандом избран рецепт. Ова може да го видиме на сликите во продолжение.  
+<img width="330" height="430" alt="73" src="https://github.com/user-attachments/assets/2265b995-b893-451c-b1ee-a8da75d76d4c" />
+<img width="330" height="430" alt="71" src="https://github.com/user-attachments/assets/b9e544a1-38de-4a04-9b74-eda4273337e0" />
+<img width="330" height="430" alt="72" src="https://github.com/user-attachments/assets/68050fae-6282-497d-9e14-29b5006e3329" />
