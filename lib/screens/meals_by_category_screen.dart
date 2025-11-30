@@ -6,8 +6,14 @@ import 'meal_details_screen.dart';
 
 class MealsByCategoryScreen extends StatefulWidget {
   final String category;
+  final void Function(MealSummary)? onFavoriteChanged;
+  final List<MealSummary> favoriteMeals;
 
-  const MealsByCategoryScreen({super.key, required this.category});
+  const MealsByCategoryScreen({
+    super.key,
+    required this.category,
+    this.onFavoriteChanged,
+    required this.favoriteMeals,});
 
   @override
   State<MealsByCategoryScreen> createState() => _MealsByCategoryScreenState();
@@ -28,6 +34,11 @@ class _MealsByCategoryScreenState extends State<MealsByCategoryScreen> {
 
   Future<void> loadMeals() async {
     final data = await apiService.loadMealsByCategory(widget.category);
+
+    for (var meal in data) {
+      meal.isFavorite = widget.favoriteMeals.any((fav) => fav.id == meal.id);
+    }
+
     setState(() {
       meals = data;
       filteredMeals = data;
@@ -96,6 +107,20 @@ class _MealsByCategoryScreenState extends State<MealsByCategoryScreen> {
                             ),
                           ),
                         );
+                      },
+                      onFavoriteToggle: () {
+                        setState(() {
+                          filteredMeals[index].isFavorite = !filteredMeals[index].isFavorite;
+
+                          final mealIndex = meals.indexWhere((m) => m.id == filteredMeals[index].id);
+                          if (mealIndex != -1) {
+                            meals[mealIndex].isFavorite = filteredMeals[index].isFavorite;
+                          }
+                        });
+
+                        if (widget.onFavoriteChanged != null) {
+                          widget.onFavoriteChanged!(filteredMeals[index]);
+                        }
                       },
                     ),
                   );

@@ -20,6 +20,16 @@ class ApiService {
     return [];
   }
 
+  Future<List<MealSummary>> loadMeals() async {
+    final response = await http.get(Uri.parse('$baseUrl/search.php?s='));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body)['meals'] as List;
+      return data.map((json) => MealSummary.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load meals');
+    }
+  }
+
   Future<List<MealSummary>> loadMealsByCategory(String category) async {
     final encodedCategory = Uri.encodeComponent(category);
     final response = await http.get(Uri.parse("${baseUrl}filter.php?c=$encodedCategory"));

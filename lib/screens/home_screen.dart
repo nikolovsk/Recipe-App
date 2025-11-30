@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/category.dart';
+import '../models/meal_summary.dart';
 import '../services/api_service.dart';
 import '../widgets/category_card.dart';
+import 'favorites_screen.dart';
 import 'meals_by_category_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,11 +18,20 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Category> categories = [];
   List<Category> filtered = [];
   bool loading = true;
+  List<MealSummary> _meals = [];
 
   @override
   void initState() {
     super.initState();
     loadCategories();
+    loadMeals();
+  }
+
+  Future<void> loadMeals() async {
+    final data = await apiService.loadMeals();
+    setState(() {
+      _meals = data;
+    });
   }
 
   Future<void> loadCategories() async {
@@ -59,6 +70,25 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             icon: const Icon(Icons.shuffle, color: Colors.white,),
           ),
+          IconButton(
+            icon: const Icon(Icons.favorite, color: Colors.white),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FavoritesScreen(
+                    favoriteMeals: _meals.where((meal) => meal.isFavorite).toList(),
+                    onFavoritesChanged: (updatedFavorites) {
+                      for (var meal in _meals) {
+                        meal.isFavorite = updatedFavorites.any((fav) => fav.id == meal.id);
+                      }
+                      setState(() {});
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
         ],
       ),
       body: loading
@@ -89,10 +119,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       MaterialPageRoute(
                         builder: (_) => MealsByCategoryScreen(
                           category: filtered[index].name,
+                          favoriteMeals: _meals,
+                          onFavoriteChanged: (meal) {
+                            final existingIndex = _meals.indexWhere((m) => m.id == meal.id);
+                            if (existingIndex != -1) {
+                              _meals[existingIndex].isFavorite = meal.isFavorite;
+                            } else {
+                              _meals.add(meal);
+                            }
+                            setState(() {});
+                          },
                         ),
                       ),
-                    );
-                  },
+                    ).then((_) {
+                      setState(() {});
+                    });
+                  }
                 );
               },
             ),

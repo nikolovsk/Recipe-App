@@ -1,8 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_app/screens/home_screen.dart';
 import 'package:recipe_app/screens/random_meal_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+//Firestore test
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+Future<void> testFirestore() async {
+  final docRef = FirebaseFirestore.instance.collection('test').doc('check');
+  await docRef.set({'message': 'Hello Firebase!'});
+  final snapshot = await docRef.get();
+  print("Firestore data: ${snapshot.data()}");
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await testFirestore();
   runApp(const MyApp());
 }
 
