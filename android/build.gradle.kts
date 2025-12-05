@@ -1,3 +1,15 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.google.gms:google-services:4.4.2")
+    }
+}
+
+ext["desugar_jdk_libs_version"] = "2.1.4"
+
 allprojects {
     repositories {
         google()

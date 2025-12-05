@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../main.dart';
 import '../models/category.dart';
 import '../models/meal_summary.dart';
 import '../services/api_service.dart';
@@ -86,6 +87,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                 ),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.notifications, color: Colors.white),
+            onPressed: () async {
+              await scheduleReminderNotification();
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Reminder: Check out one random recipe!"))
               );
             },
           ),
