@@ -106,6 +106,40 @@ void main() async {
 
   await setupFlutterNotifications();
 
+  NotificationSettings settings =
+  await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  print("Permission status: ${settings.authorizationStatus}");
+
+  String? token = await FirebaseMessaging.instance.getToken();
+  print("FCM Token: $token");
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print("FCM (foreground): ${message.notification?.title}");
+
+    flutterLocalNotificationsPlugin.show(
+      message.hashCode,
+      message.notification?.title,
+      message.notification?.body,
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'recipe_channel',
+          'Recipe Notifications',
+          importance: Importance.high,
+          priority: Priority.high,
+        ),
+      ),
+    );
+  });
+
+  FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    print("User tapped notification");
+  });
+
   await scheduleDailyNotification();
 
   runApp(const MyApp());
